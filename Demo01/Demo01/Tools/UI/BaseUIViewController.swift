@@ -14,7 +14,6 @@ class BaseUIViewController: UIViewController
     {
         super.viewDidLoad()
         
-        self.edgesForExtendedLayout = .init(rawValue: 0)
     }
     
     deinit
