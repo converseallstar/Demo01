@@ -22,12 +22,15 @@ class YZHomePageViewController: BaseUIViewController {
         setupUI()
         
         prepareData()
+
     }
     
     private func prepareData()
     {
         let request = YZHomePageRequest<[YZHomePageModel]>()
-        MBProgressHUD.showAdded(to: view, animated: true)
+        DispatchQueue.main.async {
+            MBProgressHUD.showAdded(to: self.view, animated: true)
+        }
         request.execute().onSuccess { [weak self](models) in
             self?.dataArray = models
             self?.myTableView.isHidden = false
@@ -37,7 +40,9 @@ class YZHomePageViewController: BaseUIViewController {
             }.onComplete { [weak self] in
                 if let v = self?.view
                 {
-                    MBProgressHUD.hide(for: v, animated: true)
+                    DispatchQueue.main.async {
+                        MBProgressHUD.hide(for: v, animated: true)
+                    }
                 }
         }
     }
@@ -45,6 +50,12 @@ class YZHomePageViewController: BaseUIViewController {
     private func setupUI()
     {
         myTableView.estimatedRowHeight = 265
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if myTableView.isHidden {
+            prepareData()
+        }
     }
 
 }
